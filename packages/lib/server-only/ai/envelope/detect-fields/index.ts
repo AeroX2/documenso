@@ -286,14 +286,11 @@ const detectFieldsFromPage = async ({
     ],
   });
 
-  console.log('whats up doc');
   const result = await generateObject({
     model: openrouter(env('OPENROUTER_MODEL') || 'google/gemini-3-flash-preview'),
-
     system: SYSTEM_PROMPT,
     schema: ZSubmitDetectedFieldsInputSchema,
     messages,
-    temperature: 0.5,
   });
 
   if (!result.object) {
