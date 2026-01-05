@@ -206,11 +206,11 @@ export const renderSignatureFieldElement = (
     fieldGroup.getLayer()?.batchDraw();
   });
 
-  // Handle export mode.
-  if (mode === 'export') {
-    // Hide the rectangle.
-    fieldRect.opacity(0);
-  }
+  // // Handle export mode.
+  // if (mode === 'export') {
+  //   // Hide the rectangle.
+  //   fieldRect.opacity(0);
+  // }
 
   if (color !== 'readOnly' && mode !== 'export') {
     createFieldHoverInteraction({ fieldGroup, fieldRect, options });

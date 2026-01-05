@@ -66,15 +66,20 @@ export const upsertFieldRect = (
       name: 'field-rect',
     });
 
+  const shrinkAmount = mode === 'export' ? 2 : 0;
+
   fieldRect.setAttrs({
-    width: fieldWidth,
-    height: fieldHeight,
+    // x: shrinkAmount,
+    y: shrinkAmount,
+    width: fieldWidth, // - shrinkAmount * 2,
+    height: fieldHeight - shrinkAmount * 2,
     fill: DEFAULT_RECT_BACKGROUND,
     stroke: color ? RECIPIENT_COLOR_STYLES[color].baseRing : '#e5e7eb',
     strokeWidth: 2,
+    strokeEnabled: mode !== 'export',
     cornerRadius: 2,
     strokeScaleEnabled: false,
-    visible: mode !== 'export',
+    visible: true,
   } satisfies Partial<Konva.RectConfig>);
 
   return fieldRect;

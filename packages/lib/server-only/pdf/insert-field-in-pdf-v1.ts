@@ -515,7 +515,7 @@ export const insertFieldInPDFV1 = async (pdf: PDFDocument, field: FieldWithSigna
         // Hide borders.
         borderWidth: 0,
         borderColor: undefined,
-        backgroundColor: undefined,
+        backgroundColor: rgb(1, 1, 1),
 
         ...(isDebugMode ? { borderWidth: 1, borderColor: rgb(0, 0, 1) } : {}),
       });
