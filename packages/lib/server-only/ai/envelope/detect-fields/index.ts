@@ -7,10 +7,11 @@ import { prisma } from '@documenso/prisma';
 
 import { AppError, AppErrorCode } from '../../../../errors/app-error';
 import { getFileServerSide } from '../../../../universal/upload/get-file.server';
+import { env } from '../../../../utils/env';
 import { resizeImageToGeminiImage } from '../../../../utils/images/resize-image-to-gemini-image';
 import { getEnvelopeById } from '../../../envelope/get-envelope-by-id';
 import { createEnvelopeRecipients } from '../../../recipient/create-envelope-recipients';
-import { vertex } from '../../google';
+import { openrouter } from '../../openrouter';
 import { pdfToImages } from '../../pdf-to-images';
 import {
   buildRecipientContextMessage,
@@ -285,19 +286,14 @@ const detectFieldsFromPage = async ({
     ],
   });
 
+  console.log('whats up doc');
   const result = await generateObject({
-    model: vertex('gemini-3-flash-preview'),
+    model: openrouter(env('OPENROUTER_MODEL') || 'google/gemini-3-flash-preview'),
+
     system: SYSTEM_PROMPT,
     schema: ZSubmitDetectedFieldsInputSchema,
     messages,
     temperature: 0.5,
-    providerOptions: {
-      google: {
-        thinkingConfig: {
-          thinkingLevel: 'low',
-        },
-      },
-    },
   });
 
   if (!result.object) {

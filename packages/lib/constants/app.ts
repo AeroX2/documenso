@@ -19,5 +19,4 @@ export const SUPPORT_EMAIL = env('NEXT_PUBLIC_SUPPORT_EMAIL') ?? 'support@docume
 export const USE_INTERNAL_URL_BROWSERLESS = () =>
   env('NEXT_PUBLIC_USE_INTERNAL_URL_BROWSERLESS') === 'true';
 
-export const IS_AI_FEATURES_CONFIGURED = () =>
-  !!env('GOOGLE_VERTEX_PROJECT_ID') && !!env('GOOGLE_VERTEX_API_KEY');
+export const IS_AI_FEATURES_CONFIGURED = () => !!env('OPENROUTER_API_KEY');

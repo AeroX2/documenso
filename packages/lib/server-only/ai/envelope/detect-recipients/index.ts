@@ -5,8 +5,9 @@ import { chunk } from 'remeda';
 
 import { AppError, AppErrorCode } from '../../../../errors/app-error';
 import { getFileServerSide } from '../../../../universal/upload/get-file.server';
+import { env } from '../../../../utils/env';
 import { getEnvelopeById } from '../../../envelope/get-envelope-by-id';
-import { vertex } from '../../google';
+import { openrouter } from '../../openrouter';
 import { pdfToImages } from '../../pdf-to-images';
 import { SYSTEM_PROMPT } from './prompt';
 import type { TDetectedRecipientSchema } from './schema';
@@ -207,7 +208,8 @@ const detectRecipientsFromImages = async ({
     });
 
     const result = await generateObject({
-      model: vertex('gemini-3-flash-preview'),
+      model: openrouter(env('OPENROUTER_MODEL') || 'google/gemini-2.0-flash-001'),
+
       system: SYSTEM_PROMPT,
       schema: ZDetectedRecipientsSchema,
       messages,
