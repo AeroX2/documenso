@@ -23,10 +23,7 @@ export type LoadedPDFDocument = PDFDocumentProxy;
  * Wrapped in typeof window check to prevent SSR evaluation.
  */
 if (typeof window !== 'undefined') {
-  pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
-    import.meta.url,
-  ).toString();
+  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`;
 }
 
 const pdfViewerOptions = {

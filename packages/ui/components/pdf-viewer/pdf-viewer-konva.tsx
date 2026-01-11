@@ -18,10 +18,7 @@ export type LoadedPDFDocument = PDFDocumentProxy;
 /**
  * This imports the worker from the `pdfjs-dist` package.
  */
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
-  import.meta.url,
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`;
 
 const pdfViewerOptions = {
   cMapUrl: `${NEXT_PUBLIC_WEBAPP_URL()}/static/cmaps/`,
@@ -82,21 +79,22 @@ export const PdfViewerKonva = ({
   const [numPages, setNumPages] = useState(0);
   const [pdfError, setPdfError] = useState(false);
 
-  const envelopeItemFile = useMemo(() => {
-    const data = getPdfBuffer(currentEnvelopeItem?.id || '');
+  const data = getPdfBuffer(currentEnvelopeItem?.id || '');
 
+  const envelopeItemFile = useMemo(() => {
     if (!data || data.status !== 'loaded') {
       return null;
     }
 
     return {
-      data: new Uint8Array(data.file),
+      data: data.file,
     };
-  }, [currentEnvelopeItem?.id, getPdfBuffer]);
+  }, [data]);
 
   const onDocumentLoaded = useCallback(
     (doc: PDFDocumentProxy) => {
       setNumPages(doc.numPages);
+      onDocumentLoad?.();
     },
     [onDocumentLoad],
   );
