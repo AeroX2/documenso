@@ -25,7 +25,7 @@ const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
 export default defineConfig({
   css: {
     postcss: {
-      // @ts-expect-error - Vite bundles its own PostCSS version which conflicts with workspace PostCSS types
+      // @ts-ignore - Vite bundles its own PostCSS version which conflicts with workspace PostCSS types
       plugins: [tailwindcss, autoprefixer],
     },
   },
