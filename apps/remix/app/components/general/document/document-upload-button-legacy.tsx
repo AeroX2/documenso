@@ -1,32 +1,26 @@
-import { useMemo, useState } from 'react';
-
-import { msg } from '@lingui/core/macro';
-import { useLingui } from '@lingui/react';
-import { Trans } from '@lingui/react/macro';
-import { EnvelopeType } from '@prisma/client';
-import { useNavigate, useParams } from 'react-router';
-import { match } from 'ts-pattern';
-
 import { useLimits } from '@documenso/ee/server-only/limits/provider/client';
 import { useAnalytics } from '@documenso/lib/client-only/hooks/use-analytics';
 import { useCurrentOrganisation } from '@documenso/lib/client-only/providers/organisation';
 import { useSession } from '@documenso/lib/client-only/providers/session';
-import { APP_DOCUMENT_UPLOAD_SIZE_LIMIT } from '@documenso/lib/constants/app';
 import { DEFAULT_DOCUMENT_TIME_ZONE, TIME_ZONES } from '@documenso/lib/constants/time-zones';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { formatDocumentsPath, formatTemplatesPath } from '@documenso/lib/utils/teams';
 import { trpc } from '@documenso/trpc/react';
 import type { TCreateDocumentPayloadSchema } from '@documenso/trpc/server/document-router/create-document.types';
 import type { TCreateTemplatePayloadSchema } from '@documenso/trpc/server/template-router/schema';
+import { buildDropzoneRejectionDescription } from '@documenso/ui/lib/handle-dropzone-rejection';
 import { cn } from '@documenso/ui/lib/utils';
 import { DocumentUploadButton as DocumentUploadButtonPrimitive } from '@documenso/ui/primitives/document-upload-button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@documenso/ui/primitives/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@documenso/ui/primitives/tooltip';
 import { useToast } from '@documenso/ui/primitives/use-toast';
+import { msg } from '@lingui/core/macro';
+import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/react/macro';
+import { EnvelopeType } from '@prisma/client';
+import { useMemo, useState } from 'react';
+import type { FileRejection } from 'react-dropzone';
+import { useNavigate, useParams } from 'react-router';
+import { match } from 'ts-pattern';
 
 import { useCurrentTeam } from '~/providers/team';
 
@@ -35,10 +29,7 @@ export type DocumentUploadButtonLegacyProps = {
   type: EnvelopeType;
 };
 
-export const DocumentUploadButtonLegacy = ({
-  className,
-  type,
-}: DocumentUploadButtonLegacyProps) => {
+export const DocumentUploadButtonLegacy = ({ className, type }: DocumentUploadButtonLegacyProps) => {
   const { _ } = useLingui();
   const { toast } = useToast();
   const { user } = useSession();
@@ -149,6 +140,15 @@ export const DocumentUploadButtonLegacy = ({
           'ENVELOPE_ITEM_LIMIT_EXCEEDED',
           () => msg`You have reached the limit of the number of files per envelope.`,
         )
+        .with('UNSUPPORTED_FILE_TYPE', () => msg`This file type isn't supported. Please upload a PDF or Word document.`)
+        .with(
+          'CONVERSION_SERVICE_UNAVAILABLE',
+          () => msg`Document conversion is temporarily unavailable. Please try again shortly or upload a PDF.`,
+        )
+        .with(
+          'CONVERSION_FAILED',
+          () => msg`We couldn't convert this file. Please check it's a valid Word document or upload a PDF instead.`,
+        )
         .otherwise(() => msg`An error occurred while uploading your document.`);
 
       toast({
@@ -162,10 +162,10 @@ export const DocumentUploadButtonLegacy = ({
     }
   };
 
-  const onFileDropRejected = () => {
+  const onFileDropRejected = (fileRejections: FileRejection[]) => {
     toast({
       title: _(msg`Your document failed to upload.`),
-      description: _(msg`File cannot be larger than ${APP_DOCUMENT_UPLOAD_SIZE_LIMIT}MB`),
+      description: _(buildDropzoneRejectionDescription(fileRejections)),
       duration: 5000,
       variant: 'destructive',
     });
