@@ -58,8 +58,7 @@ export const createPublicEnv = () => ({
   NEXT_PUBLIC_SIGNING_TRANSPORT_IS_CSC: process.env.NEXT_PRIVATE_SIGNING_TRANSPORT === 'csc' ? 'true' : 'false',
   // Derived from the private OpenRouter credentials so the client can gate AI
   // feature UI on a boolean.
-  NEXT_PUBLIC_AI_FEATURES_ENABLED:
-    process.env.OPENROUTER_API_KEY ? 'true' : 'false',
+  NEXT_PUBLIC_AI_FEATURES_ENABLED: process.env.OPENROUTER_API_KEY ? 'true' : 'false',
   NEXT_PUBLIC_GOOGLE_SSO_ENABLED:
     process.env.NEXT_PRIVATE_GOOGLE_CLIENT_ID && process.env.NEXT_PRIVATE_GOOGLE_CLIENT_SECRET ? 'true' : 'false',
   NEXT_PUBLIC_MICROSOFT_SSO_ENABLED:
