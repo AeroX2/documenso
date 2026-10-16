@@ -56,10 +56,10 @@ export const createPublicEnv = () => ({
   // Derived from the private transport so the client can detect CSC mode for
   // authoring UI gating without exposing the raw transport value.
   NEXT_PUBLIC_SIGNING_TRANSPORT_IS_CSC: process.env.NEXT_PRIVATE_SIGNING_TRANSPORT === 'csc' ? 'true' : 'false',
-  // Derived from the private Vertex credentials so the client can gate AI
+  // Derived from the private OpenRouter credentials so the client can gate AI
   // feature UI on a boolean.
   NEXT_PUBLIC_AI_FEATURES_ENABLED:
-    process.env.GOOGLE_VERTEX_PROJECT_ID && process.env.GOOGLE_VERTEX_API_KEY ? 'true' : 'false',
+    process.env.OPENROUTER_API_KEY ? 'true' : 'false',
   NEXT_PUBLIC_GOOGLE_SSO_ENABLED:
     process.env.NEXT_PRIVATE_GOOGLE_CLIENT_ID && process.env.NEXT_PRIVATE_GOOGLE_CLIENT_SECRET ? 'true' : 'false',
   NEXT_PUBLIC_MICROSOFT_SSO_ENABLED:
